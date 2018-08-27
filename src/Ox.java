@@ -8,15 +8,17 @@ public class Ox {
     };
 
 
-    private int countX;
-    private int countO;
-    private int countDraw;
+    private int turnCount;
+    private int scoreX;
+    private int scoreO;
+    private int scoreDraw;
 
     public Ox(){
         player = "X";
-        countX = 0;
-        countO = 0;
-        countDraw = 0;
+        turnCount = 0;
+        scoreX = 0;
+        scoreO = 0;
+        scoreDraw =0;
     }
 
     public String getTableString() {
@@ -34,29 +36,29 @@ public class Ox {
         return player;
     }
 
-    public int getCountO() {
-        return countO;
-    }
-
-    public int getCountX() {
-        return countX;
-    }
-
-    public int getCountDraw() {
-        return countDraw;
-    }
-
     public boolean put(int row, int col) {
         try {
             if (!table[row + 1][col + 1].equals("-")) {
                 return false;
             } else {
                 table[row + 1][col + 1] = getCurrentPlayer();
+                turnCount++;
+                if(checkWin(row,col)){
+                    if(player.equals("X")){
+                        scoreX++;
+                    }else if(player.equals("O")){
+                        scoreO++;
+                    }
+                }
+                if(isDraw()){
+                    scoreDraw++;
+                }
                 return true;
             }
         }catch (Exception ex){
             return false;
         }
+
     }
 
     public void switchPlayer() {
@@ -69,95 +71,81 @@ public class Ox {
     }
 
     public boolean checkWin(int row, int col) {
-        int check=1;
-        int r=row;
-        int c=col;
-        int num=1;
 
-        for(r = 0; r < 3; r++) {
-            for (c = 0; c < 3; c++) {
-                if(table[row + 1][c + 1].equals("O") ||
-                   table[row + 1][c + 1].equals("X")){
-                    num++;
-                }
+        boolean rowWin = true;
+        for(int i=0;i<3;i++){
+            if(!table[row+1][i+1].equals(player)){
+                rowWin=false;
             }
         }
-        if(num==9){
-            countDraw++;
+        if(rowWin){
             return true;
         }
-            if(player.equals("O")) {
-                for (c = 0; c < 3; c++) {
-                    if(c+1==col+1) {
 
-                    }else {
-                        if (table[row + 1][c + 1].equals("O")) {
-                            check++;
-                        }
-                    }
-                }
-                for (r = 0; r < 3; r++) {
-                    if(r+1==row+1) {
-
-                    }else {
-                        if (table[r + 1][col + 1].equals("O")) {
-                            check++;
-                        }
-                    }
-                }
-                for(r = 0; r < 3; r++){
-                    if (table[r + 1][r + 1].equals("O") ) {
-                        check++;
-                    }
-                }
-
-                for(r = 0,c = 3; r < 3 && c >= 0; r++,c--){
-                    if(table[r+1][c].equals("O")){
-                        check++;
-                    }
-                }
-                if(check==5 && num != 9) {
-                    countX++;
-                    return true;
-                }
-
-            }else if(player.equals("X")) {
-                for (c = 0; c < 3; c++) {
-                    if (c + 1 == col + 1) {
-
-                    } else {
-                        if (table[row + 1][c + 1].equals("X")) {
-                            check++;
-                        }
-                    }
-                }
-                for (r = 0; r < 3; r++) {
-                    if (r + 1 == row + 1) {
-
-                    } else {
-                        if (table[r + 1][col + 1].equals("X")) {
-                            check++;
-                        }
-                    }
-                }
-                for (r = 0; r < 3; r++) {
-                    if (table[r + 1][r + 1].equals("X")) {
-                        check++;
-                    }
-                }
-
-                for (r = 0, c = 3; r < 3 && c >= 0; r++, c--) {
-                    if (table[r + 1][c].equals("X")) {
-                        check++;
-                    }
-                }
-                if(check==5 && num != 9) {
-                    countO++;
-                    return true;
-                }
+        boolean colWin = true;
+        for(int i=0;i<3;i++){
+            if(!table[i+1][col+1].equals(player)){
+                colWin=false;
             }
+        }
+        if(colWin){
+            return true;
+        }
+
+        boolean esWin = true;
+        for(int i=0;i<3;i++){
+            if(!table[i+1][i+1].equals(player)){
+                esWin=false;
+            }
+        }
+        if(esWin){
+            return true;
+        }
+
+        boolean ssWin = true;
+        for(int i=0;i<3;i++){
+            if(!table[i+1][3-i].equals(player)){
+                ssWin=false;
+            }
+        }
+        if(ssWin){
+            return true;
+        }
 
         return false;
     }
 
+    public void reset() {
+        for(int i = 0; i < 3; i++){
+            for(int j = 0; j < 3; j++){
+                table[i+1][j+1]="-";
+            }
+        }
+        player = "X";
+        turnCount = 0;
+    }
+
+    public int getTurnCount() {
+
+        return turnCount;
+    }
+
+    public boolean isDraw() {
+        if(turnCount < 9){
+            return false;
+        }
+        return true;
+    }
+
+    public int getScoreX() {
+        return scoreX;
+    }
+
+    public int getScoreO() {
+        return scoreO;
+    }
+
+    public int getScoreDraw() {
+        return scoreDraw;
+    }
 }

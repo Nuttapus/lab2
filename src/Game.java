@@ -18,11 +18,11 @@ public class Game {
         }while(!canPut);
     }
 
-    public static void print(){
+    public static void printScore(){
         System.out.print(ox.getTableString());
-        System.out.println("X win "+ox.getCountX());
-        System.out.println("O win "+ox.getCountO());
-        System.out.print("Draw "+ox.getCountDraw());
+        System.out.println("X win "+ox.getScoreX());
+        System.out.println("O win "+ox.getScoreO());
+        System.out.println("Draw "+ox.getScoreDraw());
     }
 
     public static void main(String[]ken){
@@ -30,11 +30,18 @@ public class Game {
         while(true) {
             System.out.print(ox.getTableString());
             input();
-            ox.switchPlayer();
-            if(ox.checkWin(row,col) == true){
-                print();
-                break;
+            if(ox.checkWin(row,col)){
+                printScore();
+                ox.reset();
+                continue;
             }
+            if(ox.isDraw()){
+                printScore();
+                ox.reset();
+                continue;
+            }
+            ox.switchPlayer();
+
         }
     }
 }
