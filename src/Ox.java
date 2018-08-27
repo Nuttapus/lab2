@@ -119,8 +119,6 @@ public class Ox {
                 if(check==5 && num != 9) {
                     countX++;
                     return true;
-                }else{
-                    return false;
                 }
 
             }else if(player.equals("X")) {
@@ -156,12 +154,10 @@ public class Ox {
                 if(check==5 && num != 9) {
                     countO++;
                     return true;
-                }else{
-                    return false;
                 }
             }
 
-        return true;
+        return false;
     }
 
 }
